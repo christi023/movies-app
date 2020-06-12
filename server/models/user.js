@@ -1,22 +1,25 @@
-import { Schema } from 'mongoose';
-import { default as validator } from 'validator';
+const mongoose = require('mongoose');
 // hashing passwords
-import { default as validator } from 'validator';
+const validator = require('validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const userSchema = Schema({
+const userSchema = mongoose.Schema({
   name: {
     type: String,
     required: true,
-    minLength: 5,
+    maxLength: 50,
+  },
+  lastname: {
+    type: String,
+    required: true,
     maxLength: 50,
   },
   email: {
     type: String,
     required: true,
     minLength: 10,
-    trim: true,
+    trim: true, //calls .trim() on the value to get rid of whitespace
     unique: 1,
     validate: (value) => {
       if (!validator.isEmail(value)) {
@@ -39,6 +42,25 @@ const userSchema = Schema({
   ],
 });
 
+// this function will be called before a document is saved
+userSchema.pre('save', async function (next) {
+  const user = this;
+  if (user.isModified('password')) {
+    // hash passwords
+    user.password = await bcrypt.hash(user.password, 8);
+  }
+  next();
+});
+
+// Generate an auth token for the user
+userSchema.methods.generateAuthToken = async function () {
+  const user = this;
+  const token = jwt.sign({ _id: user._id }, process.env.SECRET);
+  user.tokens = user.tokens.concat({ token });
+  await user.save();
+  return token;
+};
+
 const User = mongoose.model('User', userSchema);
 
-module.exports = User;
+module.exports = { User };
