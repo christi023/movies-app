@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 // router imports
 const userRouter = require('./routes/user');
+const movieRouter = require('./routes/movie');
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use(cors());
 
 // ------- ROUTER -------- //
 app.use(userRouter);
+app.use(movieRouter);
 
 // env variable port created
 const PORT = process.env.PORT || 5000;
