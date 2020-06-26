@@ -1,0 +1,11 @@
+.col.s6 strong {
+  color: red;
+}
+
+.card-header .fa {
+  transition: 0.3s transform ease-in-out;
+}
+
+.card-header .collapsed .fa {
+  transform: rotate(90deg);
+}
