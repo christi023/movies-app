@@ -5,7 +5,19 @@ const { User } = require('../models/user');
 const { auth } = require('../middleware/auth');
 
 //------------------ USER AUTH ROUTE -----------------------
-
+router.get('/api/users/auth', auth, async (req, res) => {
+  try {
+    res.status(200).json({
+      isAuth: true,
+      email: req.user.email,
+      name: req.user.name,
+      lastname: req.user.lastname,
+      history: req.user.history,
+    });
+  } catch (error) {
+    return error;
+  }
+});
 //------------------REGISTER USER ROUTE----------------------
 router.post('/api/users/register', async (req, res) => {
   // Create a new user-register new user
