@@ -1,0 +1,64 @@
+a {
+  text-decoration: none;
+  color: whitesmoke;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+  background: blueviolet;
+  width: 150px;
+  height: 55px;
+  padding: 15px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  margin-right: 10px;
+  border: none;
+  outline: none;
+  border-radius: 15px;
+}
+
+a:hover {
+  background: black;
+  color: royalblue;
+}
+
+.bg-danger {
+  margin: 12px;
+  padding: 25px;
+  text-align: center;
+}
+
+.movie-page {
+  width: 70%;
+  margin: 50px auto;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.movie-page h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 3rem;
+  color: green;
+}
+
+.movie-content {
+  display: flex;
+}
+
+.movie-content img {
+  margin-right: 20px;
+  margin-bottom: 30px;
+}
+
+.movie-content p {
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.movie-content strong {
+  color: red;
+}
+
+.poster {
+  width: 300px;
+  margin-right: 40px;
+}
