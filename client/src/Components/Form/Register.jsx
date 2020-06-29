@@ -15,20 +15,39 @@ import Typography from '@material-ui/core/Typography';
 
 import Container from '@material-ui/core/Container';
 import withStyles from '@material-ui/core/styles/withStyles';
-
+import useInputForm from '../../Hooks/useInputForm';
 // styles jss
 import styles from '../../styles/FormStyles';
 
-function Register(props) {
+function Register() {
   const { register, handleSubmit, control, errors } = useForm(); // initialize the hook
   /*const onSubmit = (data) => {
       console.log(data);
     };*/
-  const classes = withStyles(props);
+  const { values } = useInputForm();
+
+  const classes = withStyles();
 
   // onSubmit
   const onSubmit = (data) => {
     console.log(data);
+    fetch('/api/users/register', {
+      method: 'post',
+      headers: {
+        'access-control-allow-origin': '*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        values,
+      }),
+    })
+      .then((response) => response.json())
+      .then((user) => {
+        if (user.id) {
+          this.props.loadUser(user); // we are loading the user
+          //this.props.onRouteChange('/movie'); // here we are changing the route back to home
+        }
+      });
   };
   return (
     <Container className={classes.main} component="main" maxWidth="xs">

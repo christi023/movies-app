@@ -12,7 +12,8 @@
 // show errors if there are errors
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-//import useInputForm from '../../Hooks/useInputForm';
+//import { Redirect } from 'react-router-dom';
+import useInputForm from '../../Hooks/useInputForm';
 //import validate from './validateLogin';
 // material ui
 import Avatar from '@material-ui/core/Avatar';
@@ -30,21 +31,72 @@ import Typography from '@material-ui/core/Typography';
 
 import Container from '@material-ui/core/Container';
 import withStyles from '@material-ui/core/styles/withStyles';
-
 // styles jss
 import styles from '../../styles/FormStyles';
 
-function SignIn() {
-  const { register, handleSubmit, control, errors } = useForm(); // initialize the hook
+function SignIn(props) {
+  //const { register, handleChange, handleSubmit, control, values, errors, reset } = useInputForm(
+  //onSubmit,
+  //validate,
+  //);
+
+  // initialize the hook
   /*const onSubmit = (data) => {
     console.log(data);
   };*/
 
+  // const classes = withStyles();
+  // const onRouteChange = props;
+
+  // onSubmit
+  /*const onSubmit = (data) => {
+    console.log(data, 'Signed In Successfully');
+    fetch('/api/users', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        values,
+      }),
+    })
+      .then((response) => response.json())
+      .then((user) => {
+        if (user.id) {
+          //return null;
+          //} else if (user)           {
+          props.loadUser(user);
+          props.onRouteChange('/movie');
+        }
+      });
+  };*/
+  const { register, handleSubmit, control, errors } = useForm(); // initialize the hook
+  const { values, reset } = useInputForm();
+
+  //onSubmit,
+  //validate,
+  //);
+  /*const onSubmit = (data) => {
+      console.log(data);
+    };*/
   const classes = withStyles();
 
   // onSubmit
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     console.log(data);
+    fetch('/api/users/login', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        values,
+      }),
+    })
+      .then((response) => response.json())
+      .then((user) => {
+        if (user.id) {
+          //return null;
+          //} else if (user)           {
+          props.loadUser(user);
+        }
+      });
   };
 
   return (
@@ -65,12 +117,15 @@ function SignIn() {
             required
             fullWidth
             id="email"
-            label="Email Address"
+            label="Email"
             name="email"
             autoComplete="email"
             autoFocus
-          />
-          {errors.email && <span>This field is required</span>}
+            //onChange={handleChange}
+          >
+            {errors.name && <span>This field is required</span>}
+          </TextField>
+
           <TextField
             variant="outlined"
             margin="normal"
@@ -82,8 +137,11 @@ function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
-          />
-          {errors.password && <span>This field is required</span>}
+            //onChange={handleChange}
+          >
+            {errors.name && <span>This field is required</span>}
+          </TextField>
+
           <FormControlLabel
             control={
               <Controller
@@ -97,11 +155,12 @@ function SignIn() {
             label="Remember me"
           />
           <Button
-            type="submit"
+            type="Submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={onSubmit}
           >
             Sign In
           </Button>
