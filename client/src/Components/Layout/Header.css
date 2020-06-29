@@ -1,0 +1,13 @@
+#header {
+  background-color: gray;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+}
+
+#header .title {
+  margin: 0;
+  color: #fff;
+  padding: 0 1rem;
+}
