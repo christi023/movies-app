@@ -1,13 +1,60 @@
 #header {
-  background-color: gray;
+  background-color: black;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 50px;
+  height: 60px;
 }
 
 #header .title {
   margin: 0;
   color: #fff;
   padding: 0 1rem;
+  align-content: center;
+  font-family: sans-serif;
+}
+
+#header .auth-options {
+  height: 100%;
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding-bottom: 70px;
+}
+
+#header .auth-options button {
+  background-color: blueviolet;
+  /*padding: 22px;*/
+  padding: 1.1rem 1.4rem 1.2rem;
+  height: 30px;
+
+  margin-top: 15px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  border: none;
+  outline: none;
+  border-radius: 15px;
+  text-align: center;
+
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 1.1rem;
+  display: inline-block;
+}
+#header .auth-options button:hover {
+  background-color: palevioletred;
+}
+
+/*----------------------- Media ---------------------------*/
+@media screen and (max-width: 550px) {
+  #header .title {
+    font-size: 1.1rem;
+  }
+  #header .auth-options button {
+    padding: 0 0.8rem;
+    font-size: 0.9rem;
+    margin-top: 22px;
+    margin-bottom: 10px;
+  }
 }
