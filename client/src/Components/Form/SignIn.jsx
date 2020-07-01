@@ -69,7 +69,7 @@ function SignIn(props) {
       });
   };*/
   const { register, handleSubmit, control, errors } = useForm(); // initialize the hook
-  const { values, reset } = useInputForm();
+  const { values } = useInputForm();
 
   //onSubmit,
   //validate,

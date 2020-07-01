@@ -7,7 +7,7 @@ const { auth } = require('../middleware/auth');
 //------------------ USER AUTH ROUTE -----------------------
 router.get('/api/users/auth', auth, async (req, res) => {
   try {
-    res.status(200).json({
+   res.status(200).json({
       isAuth: true,
       email: req.user.email,
       name: req.user.name,
@@ -39,7 +39,7 @@ router.post('/api/users/login', async (req, res) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email });
-
+// validate
     if (!user) {
       return res.status(401).send({ error: 'Login failed! Check authentication credentials' });
     }
@@ -64,6 +64,15 @@ router.get('/api/users/logout', auth, async (req, res) => {
       success: false,
       error,
     });
+  }
+});
+
+router.delete("/api/users/delete", auth, async (req, res) => {
+  try {
+    const deletedUser = await User.findByIdAndDelete(req.user);
+    res.json(deletedUser);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
