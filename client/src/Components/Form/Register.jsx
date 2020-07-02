@@ -1,6 +1,7 @@
-import React from 'react';
-//import { Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import axios from 'axios';
 import { useForm, Controller } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
 // material ui
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -15,40 +16,51 @@ import Typography from '@material-ui/core/Typography';
 
 import Container from '@material-ui/core/Container';
 import withStyles from '@material-ui/core/styles/withStyles';
-import useInputForm from '../../Hooks/useInputForm';
+//import useInputForm from '../../Hooks/useInputForm';
+// contexts
+import UserContext from '../../contexts/UserContext';
+
 // styles jss
 import styles from '../../styles/FormStyles';
 
 function Register() {
-  const { register, handleSubmit, control, errors } = useForm(); // initialize the hook
-  /*const onSubmit = (data) => {
-      console.log(data);
-    };*/
-  const { values } = useInputForm();
+  const { register, control, errors } = useForm(); // initialize the hook
+
+  const [firstname, setFirstname] = useState();
+  const [lastname, setLastname] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [setError] = useState();
+  //const { values, handleChange } = useInputForm();
+
+  const { setUserData } = useContext(UserContext);
+  const history = useHistory();
 
   const classes = withStyles();
 
   // onSubmit
-  const onSubmit = (data) => {
-    console.log(data);
-    fetch('/api/users/register', {
-      method: 'post',
-      headers: {
-        'access-control-allow-origin': '*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        values,
-      }),
-    })
-      .then((response) => response.json())
-      .then((user) => {
-        if (user.id) {
-          this.props.loadUser(user); // we are loading the user
-          //this.props.onRouteChange('/movie'); // here we are changing the route back to home
-        }
+  const onSubmit = async (e) => {
+    //console.log(data);
+    e.preventDefault();
+    try {
+      const newUser = { firstname, lastname, email, password };
+      await axios.post('http://localhost:5000/api/users/register', newUser);
+      // login the user
+      const loginRes = await axios.post('http://localhost:5000/api/users/login', {
+        email,
+        password,
       });
+      setUserData({
+        token: loginRes.data.token,
+        user: loginRes.data.user,
+      });
+      localStorage.setItem('auth-token', loginRes.data.token);
+      history.push('/movie');
+    } catch (err) {
+      err.response.data.msg && setError(err.response.data.msg);
+    }
   };
+
   return (
     <Container className={classes.main} component="main" maxWidth="xs">
       <CssBaseline />
@@ -59,18 +71,19 @@ function Register() {
         <Typography component="h1" variant="h5">
           Register
         </Typography>
-        <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+        <form className={classes.form} onSubmit={onSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
             inputRef={register}
             required={true}
             fullWidth
-            id="name"
-            label="Name"
+            id="firstname"
+            label="FirstName"
             name="name"
-            autoComplete="name"
+            autoComplete="firstname"
             autoFocus
+            onChange={(e) => setFirstname(e.target.value)}
           >
             {errors.name && <span>This field is required</span>}
           </TextField>
@@ -85,6 +98,7 @@ function Register() {
             name="lastname"
             autoComplete="lastname"
             autoFocus
+            onChange={(e) => setLastname(e.target.value)}
           >
             {errors.name && <span>This field is required</span>}
           </TextField>
@@ -99,6 +113,7 @@ function Register() {
             name="email"
             autoComplete="email"
             autoFocus
+            onChange={(e) => setEmail(e.target.value)}
           />
           {errors.email && <span>This field is required</span>}
           <TextField
@@ -112,6 +127,7 @@ function Register() {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={(e) => setPassword(e.target.value)}
           />
           {errors.password && <span>This field is required</span>}
           <FormControlLabel

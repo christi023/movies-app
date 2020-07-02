@@ -1,20 +1,7 @@
-// form
-// label / input for email
-// label / input for password
-// signup button
-
-// handle changes
-// handle submit
-
-// custom react hook
-
-// handle errors
-// show errors if there are errors
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-//import { Redirect } from 'react-router-dom';
-import useInputForm from '../../Hooks/useInputForm';
-//import validate from './validateLogin';
+import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 // material ui
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -31,72 +18,39 @@ import Typography from '@material-ui/core/Typography';
 
 import Container from '@material-ui/core/Container';
 import withStyles from '@material-ui/core/styles/withStyles';
+// contexts
+import UserContext from '../../contexts/UserContext';
 // styles jss
 import styles from '../../styles/FormStyles';
 
-function SignIn(props) {
-  //const { register, handleChange, handleSubmit, control, values, errors, reset } = useInputForm(
-  //onSubmit,
-  //validate,
-  //);
+function SignIn() {
+  const { register, control, errors } = useForm(); // initialize the hook
 
-  // initialize the hook
-  /*const onSubmit = (data) => {
-    console.log(data);
-  };*/
-
-  // const classes = withStyles();
-  // const onRouteChange = props;
-
-  // onSubmit
-  /*const onSubmit = (data) => {
-    console.log(data, 'Signed In Successfully');
-    fetch('/api/users', {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        values,
-      }),
-    })
-      .then((response) => response.json())
-      .then((user) => {
-        if (user.id) {
-          //return null;
-          //} else if (user)           {
-          props.loadUser(user);
-          props.onRouteChange('/movie');
-        }
-      });
-  };*/
-  const { register, handleSubmit, control, errors } = useForm(); // initialize the hook
-  const { values } = useInputForm();
-
-  //onSubmit,
-  //validate,
-  //);
-  /*const onSubmit = (data) => {
-      console.log(data);
-    };*/
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [setError] = useState();
+  // JSS Styles
   const classes = withStyles();
 
+  const { setUserData } = useContext(UserContext);
+  const history = useHistory();
+
   // onSubmit
-  const onSubmit = (data) => {
-    console.log(data);
-    fetch('/api/users/login', {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        values,
-      }),
-    })
-      .then((response) => response.json())
-      .then((user) => {
-        if (user.id) {
-          //return null;
-          //} else if (user)           {
-          props.loadUser(user);
-        }
+  const onSubmit = async (e) => {
+    //console.log(data);
+    e.preventDefault();
+    try {
+      const loginUser = { email, password };
+      const loginRes = await axios.post('http://localhost:5000/api/users/login', loginUser);
+      setUserData({
+        token: loginRes.data.token,
+        user: loginRes.data.user,
       });
+      localStorage.setItem('auth-token', loginRes.data.token);
+      history.push('/movie');
+    } catch (err) {
+      err.response.data.msg && setError(err.response.data.msg);
+    }
   };
 
   return (
@@ -109,7 +63,7 @@ function SignIn(props) {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+        <form className={classes.form} onSubmit={onSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -121,7 +75,7 @@ function SignIn(props) {
             name="email"
             autoComplete="email"
             autoFocus
-            //onChange={handleChange}
+            onChange={(e) => setEmail(e.target.value)}
           >
             {errors.name && <span>This field is required</span>}
           </TextField>
@@ -137,7 +91,7 @@ function SignIn(props) {
             type="password"
             id="password"
             autoComplete="current-password"
-            //onChange={handleChange}
+            onChange={(e) => setPassword(e.target.value)}
           >
             {errors.name && <span>This field is required</span>}
           </TextField>
