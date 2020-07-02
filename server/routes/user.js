@@ -8,18 +8,6 @@ const { auth } = require('../middleware/auth');
 //------------------ USER AUTH ROUTE -----------------------
 router.get('/api/users/auth', auth, async (req, res) => {
   // get current user
-  /* try {
-    res.status(200).json({
-      isAuth: true,
-      email: req.user.email,
-      password: req.user.password,
-      firstname: req.user.name,
-      lastname: req.user.lastname,
-      id: user._id,
-    });
-  } catch (error) {
-    return error;
-  }*/
   const user = await User.findById(req.user);
   res.json({
     email: user.email,
@@ -94,7 +82,7 @@ router.post('/api/users/tokenIsValid', async (req, res) => {
     const token = req.header('x-auth-token');
     if (!token) return res.json(false);
 
-    const verified = jwt.verify(token, process.env.JWT_SECRET);
+    const verified = jwt.verify(token, process.env.SECRET);
     if (!verified) return res.json(false);
 
     const user = await User.findById(verified.id);
