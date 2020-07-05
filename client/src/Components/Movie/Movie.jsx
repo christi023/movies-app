@@ -13,11 +13,11 @@ const Movie = () => {
     getMovies();
   }, []);
 
-  const handleSearch = e => {
+  const handleSearch = (e) => {
     setSearch(e.target.value);
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     //Request Api for movies
     sessionStorage.setItem('movie', search);
