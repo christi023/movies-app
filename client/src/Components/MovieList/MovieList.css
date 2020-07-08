@@ -22,10 +22,26 @@ a:hover {
 
 .bg-danger {
   margin: 12px;
-  padding: 25px;
+  padding: 20px;
   text-align: center;
 }
 
+.nav-wrapper .brand-logo center {
+  align-content: center;
+  text-align: center;
+  display: flex;
+  margin-right: 30rem;
+}
+a.brand-logo center {
+  justify-content: center;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 40px;
+}
 .movie-page {
   width: 70%;
   margin: 50px auto;

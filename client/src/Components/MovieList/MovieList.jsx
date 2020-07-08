@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { API } from '../../utils/api';
 import MoviesApi from '../../MoviesApi';
-//import DetailsCard from '../DetailsCard/DetailsCard';
+//import DetailsCard from '../DetailsCard/Details';
 import ResultBody from '../ResultBody/ResultBody';
 // import styles
 import './MovieList.css';
@@ -14,11 +14,12 @@ const MovieList = () => {
   let movieId = sessionStorage.getItem('movieId');
 
   useEffect(() => {
-    getMovie(movieId);
+    getMovies(movieId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [movieId]);
 
   // getting movie with details
-  const getMovie = async id => {
+  const getMovies = async (id) => {
     const response = await axios.get(`https://www.omdbapi.com/?i=${id}&${API}`); // USE your api key here
     const movieDetails = response.data;
     setMovie(movieDetails);
@@ -31,12 +32,12 @@ const MovieList = () => {
 
     // saving movie to database
     axios
-      .post('http://localhost:5000/api/movie', movie)
-      .then(response => {
+      .post('http://localhost:5000/api/movie', movie, res)
+      .then((response) => {
         console.log(response);
         //this.history.push('/api/movie');
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -56,9 +57,11 @@ const MovieList = () => {
               IMDB
             </a>
 
-            <Link to="/movie">Back</Link>
+            <Link className="bg-danger" to="/movie">
+              Back
+            </Link>
           </div>
-          <div>
+          <div className="">
             <p>
               <strong>Title: </strong>
               {movie.Title}
@@ -86,7 +89,7 @@ const MovieList = () => {
               {movie.Awards}
             </p>
             <div className="nav-wrapper">
-              <a href="movie#/movie" className="brand-logo center" onClick={getMovie}>
+              <a href="/movie" className="brand-logo center" onClick={getMovies}>
                 Save Movie
               </a>
             </div>

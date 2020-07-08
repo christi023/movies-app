@@ -5,13 +5,13 @@
 export default {
   // get movies method
   getMovies: async () => {
-    const res = await fetch('/api/movies');
+    const res = await fetch('http://localhost:5000/api/movies');
     const data = await res.json();
     return data || [];
   },
 
   // delete method
-  deleteMovie: async _id => {
+  deleteMovie: async (_id) => {
     const res = await fetch(`/api/movie/${_id}`, {
       method: 'delete',
     });
@@ -20,7 +20,7 @@ export default {
   },
 
   // update method
-  updateMovie: async movie => {
+  updateMovie: async (movie) => {
     const res = await fetch(`/api/movie/${movie._id}`, {
       method: 'put',
       body: JSON.stringify(movie),
@@ -34,7 +34,7 @@ export default {
   },
 
   // create movie
-  createMovie: async movie => {
+  createMovie: async (movie) => {
     const res = await fetch(`/api/movie`, {
       method: 'post',
       body: JSON.stringify(movie),
